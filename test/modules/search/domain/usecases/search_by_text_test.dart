@@ -21,7 +21,18 @@ main() {
 
     final result = await usecase("ruth");
 
-    // expect(result, isA<Right>());
     expect(result.getOrElse(() => null), isA<List<ResultSearch>>());
+  });
+
+  test('deve retornar um InvalidTextError caso o texto seja inválido',
+      () async {
+    when(repository.search(any))
+        .thenAnswer((_) async => const Right(<ResultSearch>[]));
+
+    var result = await usecase(null);
+    expect(result.fold(id, id), isA<InvalidTextError>());
+
+    result = await usecase("");
+    expect(result.fold(id, id), isA<InvalidTextError>());
   });
 }

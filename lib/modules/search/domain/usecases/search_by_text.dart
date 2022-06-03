@@ -13,7 +13,10 @@ class SearchByTextImpl implements SearchByText {
   SearchByTextImpl(this.repository);
   @override
   Future<Either<FailureSearch, List<ResultSearch>?>> call(
-      String searchText) async {
+      String? searchText) async {
+    if (searchText == null || searchText == "") {
+      return Left(InvalidTextError());
+    }
     return repository.search(searchText);
   }
 }
